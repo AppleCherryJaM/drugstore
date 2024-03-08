@@ -5,10 +5,10 @@ const Header = () => {
     <header>
       <ul>
         <li>
-          <NavLink to="/">Shop</NavLink>
+          <NavLink to="/shop">Shop</NavLink>
         </li>
         <li>
-          <NavLink to="/cart">Shopping cart</NavLink>{' '}
+          <NavLink to="/cart">Shopping cart</NavLink>
         </li>
       </ul>
     </header>

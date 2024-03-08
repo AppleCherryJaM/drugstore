@@ -3,6 +3,7 @@ import RootLayout from './pages/RootLayout';
 import ErrorPage from './pages/ErrorPage';
 import ShopPage from './pages/ShopPage';
 import './App.css';
+import DrugCollection from './components/DrugCollection';
 
 const router = createBrowserRouter([
   {
@@ -10,7 +11,11 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <ShopPage />, },
+      {
+        path: 'shop',
+        element: <ShopPage />,
+        children: [{ path: ':shopId', element: <></> }],
+      },
       { path: 'cart', element: <></> },
     ],
   },
