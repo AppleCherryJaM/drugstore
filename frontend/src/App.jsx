@@ -4,6 +4,8 @@ import ErrorPage from './pages/ErrorPage';
 import ShopPage from './pages/ShopPage';
 import './App.css';
 import DrugCollection from './components/DrugCollection';
+import DrugPage from './pages/DrugPage';
+import CartPage from './pages/CartPage';
 
 const router = createBrowserRouter([
   {
@@ -14,9 +16,9 @@ const router = createBrowserRouter([
       {
         path: 'shop',
         element: <ShopPage />,
-        children: [{ path: ':shopId', element: <></> }],
+        children: [{ path: ':shopId', id: 'shop-medicines', element: <DrugPage /> }],
       },
-      { path: 'cart', element: <></> },
+      { path: 'cart', element: <CartPage /> },
     ],
   },
 ]);
