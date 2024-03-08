@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB = require("../models/db");
+const getCoordsForAddress = require("../util/location");
 const Store = require("../models/stores");
 const HttpError = require("../models/httpError");
 
@@ -31,6 +31,7 @@ const getStoreById = async(req, res, next) => {
 
 	res.json({ store: store.toObject( {getters: true} )});
 }
+
 const getDrugsByStoreId = async(req, res, next) => {
 	const storeId = req.params.sid;
 
@@ -58,10 +59,19 @@ const getDrugsByStoreId = async(req, res, next) => {
 }
 
 const createStore = async(req, res, next) => {
-	const {name, location, address} = req.body;
+	const {name, address} = req.body;
+
+	let location;
+	try {
+		location = await getCoordsForAddress(address);	
+	} catch (error) {
+		return next(error);
+	}
+
 	const createdStore = new Store(
 		name, location, address
 	);
+	
 	try {
 		await createStore.save();
 	} catch(error) {
