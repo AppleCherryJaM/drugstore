@@ -4,6 +4,22 @@ const getCoordsForAddress = require("../util/location");
 const Store = require("../models/stores");
 const HttpError = require("../models/httpError");
 
+const getAllStores = async (req, res, next) => {
+	let stores;
+	try {
+		stores = Store.find();
+	} catch (error) {
+		return next(
+			new HttpError(
+				error.message,
+				500
+			)
+		);
+	}
+
+	return res.status(200).json({stores: stores});
+}
+
 const getStoreById = async(req, res, next) => {
 	const storeId = req.params.sid;
 	let store;
