@@ -1,8 +1,10 @@
+const Order = require("../models/orders");
+const HttpError = require("../models/httpError");
+
 const createOrder = (req, res, next) => {
 	
 }
-const findOrderByUserEmail = () => {}
-const getAllOrders = () => {}
-const getOrderById = () => {}
+const findAllOrdersByUserEmail = () => {}
+const getOrderById = async(req, res, next) => {}
 
 exports.createOrder = createOrder;

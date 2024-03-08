@@ -1,10 +1,24 @@
+const mongoose = require("mongoose");
+
 const DB = require("../models/db");
 const Store = require("../models/stores");
 const HttpError = require("../models/httpError");
 
-const getStoreById = (req, res, next) => {
+const getStoreById = async(req, res, next) => {
 	const storeId = req.params.sid;
-	const store = DB.stores.find(store => Number(store.id) === Number(storeId));
+	let store;
+
+	try {
+		store = await Store.findById(storeId);
+	} catch (error) {
+		return next(
+			new HttpError(
+				error.message,
+				500
+			)
+		);
+		
+	}
 	
 	if (!store) {
 		return next(
@@ -15,21 +29,32 @@ const getStoreById = (req, res, next) => {
 		);
 	}
 
-	res.json({ store });
+	res.json({ store: store.toObject( {getters: true} )});
 }
-const getDrugsByStoreId = (req, res, next) => {
+const getDrugsByStoreId = async(req, res, next) => {
 	const storeId = req.params.sid;
 
-	const store = DB.stores.find(store => Number(store.id) === Number(storeId));
-	if (!store) {
+	let storeDrugs;
+
+	try {
+		storeDrugs = await Store.findById(storeId).drugs;
+	} catch (error) {
 		return next(
 			new HttpError(
-				'Could not find store',
+				error.message,
+				500
+			)
+		);
+	}
+	if (!storeDrugs || storeDrugs.length === 0) {
+		return next(
+			new HttpError(
+				'Could not find drugs in store',
 				404
 			)
 		);
 	}
-	res.json({ drugs: store.drugs });
+	res.json({ drugs: storeDrugs }).status(200);
 }
 
 const createStore = async(req, res, next) => {
@@ -50,5 +75,14 @@ const createStore = async(req, res, next) => {
 	res.status(200).json({store: createdStore.toObject({getters: true})});
 }
 
+const deleteStore = (req, res, next) => {
+
+}
+
+const updateStore = (req, res, next) => {
+
+}
+
 exports.getDrugsByStoreId = getDrugsByStoreId;
 exports.getStoreById = getStoreById;
+exports.createStore = createStore;

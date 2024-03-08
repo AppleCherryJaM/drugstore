@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-//const ordersRouter = require("./routes/orders-router");
+const ordersRouter = require("./routes/orders-router");
 const storesRouter = require("./routes/stores-router");
 
 const PORT = process.env.PORT;
@@ -12,6 +12,12 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api/stores", storesRouter);
+app.use("/api/orders", ordersRouter);
+
+app.use((req, res, next) => {
+	const error = new HttpError("Couldn't find this rout", 404);
+	throw error;
+});
 
 app.use((error, req, res, next) => {
 	if (res.headerSent) return next(error);
