@@ -28,13 +28,18 @@ const ShopPage = () => {
   // const { shops } = useLoaderData();
   const [activeShop, setActiveShop] = useState(null);
 
+  const clickHandler = (id) => {
+    setActiveShop(id);
+    console.log(activeShop);
+  };
+
   return (
     <>
       <h1>Shop page</h1>
       {/* <Await resolve={shops}>
         {loadData} */}
-      <ShopCollection shops={shops} />
-      {activeShop && <DrugCollection drugs={activeShop} onClick={() => setActiveShop(true)} />}
+      <ShopCollection shops={shops} clickHandler={clickHandler} />
+      {activeShop && <DrugCollection drugs={activeShop} />}
       {/* </Await> */}
     </>
   );

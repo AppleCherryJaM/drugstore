@@ -1,12 +1,13 @@
 import ShopComponent from './ShopComponent';
 
-const ShopCollection = ({ shops, clickHandler }) => {
-  console.log(shops)
+const ShopCollection = ({ shops }) => {
   return (
     <div>
-      {shops.map((shop) => (
-        <ShopComponent key={shop.id} name={shop.name} id={shop.id}/>
-      ))}
+      <ul>
+        {shops.map((shop) => (
+          <ShopComponent key={shop.id} name={shop.name} id={shop.id} />
+        ))}
+      </ul>
     </div>
   );
 };
