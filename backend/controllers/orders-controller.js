@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const Order = require("../models/orders");
 const HttpError = require("../models/httpError");
 
@@ -54,3 +55,13 @@ const getOrderById = async (req, res, next) => {
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
 exports.findAllOrdersByUserEmail = findAllOrdersByUserEmail;
+=======
+const createOrder = (req, res, next) => {
+	
+}
+const findOrderByUserEmail = () => {}
+const getAllOrders = () => {}
+const getOrderById = () => {}
+
+exports.createOrder = createOrder;
+>>>>>>> 94e13a3b3b7b6e7a62dfcba1336a1838b6e7633a
