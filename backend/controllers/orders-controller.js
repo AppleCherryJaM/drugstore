@@ -2,7 +2,7 @@ const Order = require("../models/orders");
 const HttpError = require("../models/httpError");
 
 const createOrder = async (req, res, next) => {
-	const { contactInfo, totalPrice, store, orderedDrugs} = req.body;
+	const { contactInfo, totalPrice, store, orderedDrugs } = (typeof req.body) === "String" ? JSON.parse(req.body) : req.body;
 	console.log("ContactInfo: ", contactInfo);
 	const createdOrder = new Order({
 		contactInfo: contactInfo,
@@ -44,7 +44,6 @@ const findAllOrdersByEmail = async (req, res, next) => {
 			{ getters: true }
 		)
 	)});
-	// res.status(201).join({oderList: });
 }
 
 const getOrderById = async (req, res, next) => {
