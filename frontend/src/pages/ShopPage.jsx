@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useLoaderData, json, defer, Await, Outlet } from 'react-router-dom';
 import ShopCollection from '../components/ShopCollection';
-import DrugCollection from '../components/DrugCollection';
 
 const shops = [
   {

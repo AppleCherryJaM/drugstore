@@ -3,7 +3,6 @@ import RootLayout from './pages/RootLayout';
 import ErrorPage from './pages/ErrorPage';
 import ShopPage from './pages/ShopPage';
 import './App.css';
-import DrugCollection from './components/DrugCollection';
 import DrugPage from './pages/DrugPage';
 import CartPage from './pages/CartPage';
 
