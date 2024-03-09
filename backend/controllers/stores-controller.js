@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const getCoordsForAddress = require("../util/location");
 const Store = require("../models/stores");
+const Drug = require("../models/drugs");
 const HttpError = require("../models/httpError");
 
 const getAllStores = async (req, res, next) => {
@@ -63,16 +64,17 @@ const getStoreById = async(req, res, next) => {
 	}
 
 	console.log(typeof stores);
-	// res.json({ store: store.toObject( {getters: true} )});
+	res.json({ store: store.toObject( {getters: true} )});
 }
 
 const getDrugsByStoreId = async(req, res, next) => {
 	const storeId = req.params.sid;
 
-	let storeDrugs;
+	let store;
+	let storeDrugs = [];
 
 	try {
-		storeDrugs = await Store.findById(storeId).drugs;
+		store = await Store.findById(storeId);
 	} catch (error) {
 		console.log("Error in getDrugsByStoreId: ", error);
 		return next(
@@ -82,7 +84,7 @@ const getDrugsByStoreId = async(req, res, next) => {
 			)
 		);
 	}
-	if (!storeDrugs || storeDrugs.length === 0) {
+	if (!store || store.drugs.length === 0) {
 		return next(
 			new HttpError(
 				'Could not find drugs in store',
@@ -90,7 +92,22 @@ const getDrugsByStoreId = async(req, res, next) => {
 			)
 		);
 	}
-	//res.json({ drugs: storeDrugs.toObject({getters: true}) }).status(200);
+
+	try {
+		for (const drug of store.drugs) {
+			const storedDrug = await Drug.findById(drug);
+			storeDrugs.push(storedDrug);
+		}
+	} catch (error) {
+		return next(
+			new HttpError(
+				error.message,
+				500
+			)
+		);
+	}
+
+	res.json({ drugs: storeDrugs.map(drug => drug.toObject({getters: true})) }).status(200);
 }
 
 const createStore = async(req, res, next) => {

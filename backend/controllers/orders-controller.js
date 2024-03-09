@@ -28,13 +28,6 @@ const findAllOrdersByEmail = async (req, res, next) => {
 	console.log("Email: ", email);
 	let orderList;
 	try {
-		// orderList = await Order.find(
-		// 	{
-		// 		contactInfo:{
-		// 			email: email
-		// 		}
-		// 	}
-		// );
 		orderList = await Order.find({}).where('contactInfo.email').equals(email)
 	} catch (error) {
 		return next(
