@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const HttpError = require("./models/httpError");
 const ordersRouter = require("./routes/orders-router");
@@ -9,6 +10,8 @@ const storesRouter = require("./routes/stores-router");
 
 const PORT = process.env.PORT;
 const app = express();
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use("/api/stores", storesRouter);
