@@ -7,7 +7,8 @@ const storeSchema = new mongoose.Schema({
 		lat: {type: Number, required:true},
 		lng: {type: Number, required:true}
 	},
-	address: {type: String, required: true}
+	address: {type: String, required: true},
+	drugs: [{ type: mongoose.Types.ObjectId, required: true, ref: "Drug" }]
 });
 
 module.exports = mongoose.model("Store", storeSchema);

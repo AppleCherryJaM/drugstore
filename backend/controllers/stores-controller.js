@@ -95,6 +95,15 @@ const getDrugsByStoreId = async(req, res, next) => {
 
 const createStore = async(req, res, next) => {
 	const {name, address} = req.body;
+	const drugs = req.body.drugs || [
+		"65ec886d472483b3fade13bd", 
+		"65ec8932472483b3fade13bf", 
+		"65ec8993472483b3fade13c1", 
+		"65ec89f5472483b3fade13c3", 
+		"65ec8a56472483b3fade13c5", 
+		"65ec8a7b472483b3fade13c7", 
+		"65ec8ae7472483b3fade13c9"
+	];
 
 	let location;
 	try {
@@ -104,7 +113,7 @@ const createStore = async(req, res, next) => {
 	}
 
 	const createdStore = new Store({
-		name, location, address, drugs: []
+		name, location, address, drugs
 	});
 	
 	try {
@@ -120,7 +129,53 @@ const createStore = async(req, res, next) => {
 	res.status(200).json({store: createdStore.toObject({getters: true})});
 }
 
+const addStoreDrugs = async (req, res, next) => {
+	const storeId = req.params.sid;
+	const {drugs} = req.body;
+
+	let updatedStore;
+	try {
+		updatedStore = await Store.findById(storeId);
+	} catch (error) {
+		return next(
+			new HttpError(
+				error.message,
+				500
+			)
+		)
+	}
+
+	if (!updatedStore) {
+		return next(
+			new HttpError(
+				"Can not find store with this id",
+				404
+			)
+		)
+	}
+
+	if (updatedStore.drugs || updatedStore.drugs.length > 0) {
+		updatedStore.drugs = updatedStore.drugs.concat(drugs);
+	} else {
+		updatedStore.drugs = drugs;
+	}
+
+	try {
+		await updatedStore.save();
+	} catch (error) {
+		return next(
+			new HttpError(
+				error.message,
+				500
+			)
+		)
+	}
+
+	res.status(200).json({updatedStore: updatedStore.toObject({getters:true})});
+}
+
 exports.getDrugsByStoreId = getDrugsByStoreId;
 exports.getStoreById = getStoreById;
 exports.createStore = createStore;
 exports.getAllStores = getAllStores;
+exports.addStoreDrugs = addStoreDrugs;

@@ -9,5 +9,6 @@ router.get("/drugs/:sid", storeController.getDrugsByStoreId);
 router.post("/drugs", drugController.createDrug);
 router.post("/", storeController.createStore);
 router.get("/", storeController.getAllStores);
+router.patch("/:sid", storeController.addStoreDrugs);
 
 module.exports = router;
