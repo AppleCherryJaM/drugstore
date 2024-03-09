@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const HttpError = require("./models/httpError");
 const ordersRouter = require("./routes/orders-router");
 const storesRouter = require("./routes/stores-router");
-// const userRouter = require("./routes/user-router");
 
 const PORT = process.env.PORT;
 const app = express();
@@ -14,7 +13,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use("/api/stores", storesRouter);
 app.use("/api/orders", ordersRouter);
-// app.use("/api/auth", userRouter);
 
 app.use((req, res, next) => {
 	const error = new HttpError("Couldn't find this rout", 404);

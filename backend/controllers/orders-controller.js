@@ -2,18 +2,17 @@ const Order = require("../models/orders");
 const HttpError = require("../models/httpError");
 
 const createOrder = async (req, res, next) => {
-	const { user_id, drug_id, drug_count, paycheck } = req.body;
-	const createdOrder = new Order(
-		user_id, 
-		drug_id, 
-		drug_count, 
-		paycheck
-	);
-	
-	let order;
+	const { contactInfo, totalPrice, store, orderedDrugs} = req.body;
+	console.log("ContactInfo: ", contactInfo);
+	const createdOrder = new Order({
+		contactInfo: contactInfo,
+		totalPrice: totalPrice,
+		store: store,
+		orderedDrugs: orderedDrugs
+	});
 
 	try {
-		await Order.save(createdOrder);
+		await createdOrder.save();
 	} catch (error) {
 		return next(new HttpError(
 			error.message,
@@ -23,9 +22,38 @@ const createOrder = async (req, res, next) => {
 
 	res.status(201).json({order: createdOrder.toObject({getters: true})});
 }
-const findAllOrdersByUserEmail = async (req, res, next) => {
 
+const findAllOrdersByEmail = async (req, res, next) => {
+	const email = req.params.email;
+	console.log("Email: ", email);
+	let orderList;
+	try {
+		// orderList = await Order.find(
+		// 	{
+		// 		contactInfo:{
+		// 			email: email
+		// 		}
+		// 	}
+		// );
+		orderList = await Order.find({}).where('contactInfo.email').equals(email)
+	} catch (error) {
+		return next(
+			new HttpError(
+				error.message,
+				500
+			)
+		);
+	}
+
+	console.log("orderList: ", orderList);
+	res.status(201).json({orderList: orderList.map(
+		order => order.toObject(
+			{ getters: true }
+		)
+	)});
+	// res.status(201).join({oderList: });
 }
+
 const getOrderById = async (req, res, next) => {
 	const orderId = req.param.oid;
 	let order;
@@ -53,4 +81,4 @@ const getOrderById = async (req, res, next) => {
 
 exports.createOrder = createOrder;
 exports.getOrderById = getOrderById;
-exports.findAllOrdersByUserEmail = findAllOrdersByUserEmail;
+exports.findAllOrdersByEmail = findAllOrdersByEmail;

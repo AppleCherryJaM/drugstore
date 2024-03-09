@@ -7,4 +7,6 @@ router.post("/new", ordersController.createOrder);
 
 router.get("/:oid", ordersController.getOrderById);
 
+router.get("/list/:email", ordersController.findAllOrdersByEmail);
+
 module.exports = router;
