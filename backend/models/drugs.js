@@ -8,4 +8,4 @@ const drugSchema = new mongoose.Schema({
 	stores: [{ type: mongoose.Types.ObjectId, required: true, ref: "Store" }]
 });
 
-mongoose.model("Drug", drugSchema);
+module.exports = mongoose.model("Drug", drugSchema);
