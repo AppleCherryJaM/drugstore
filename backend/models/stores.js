@@ -10,4 +10,4 @@ const storeSchema = new mongoose.Schema({
 	address: {type: String, required: true}
 });
 
-mongoose.model("Store", storeSchema);
+module.exports = mongoose.model("Store", storeSchema);

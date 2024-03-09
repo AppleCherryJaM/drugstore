@@ -7,7 +7,7 @@ const HttpError = require("../models/httpError");
 const getAllStores = async (req, res, next) => {
 	let stores;
 	try {
-		stores = Store.find();
+		stores = await Store.find({}, "name address location drugs");
 	} catch (error) {
 		return next(
 			new HttpError(
@@ -17,7 +17,24 @@ const getAllStores = async (req, res, next) => {
 		);
 	}
 
-	return res.status(200).json({stores: stores});
+	if (!stores) {
+		return next(
+			new HttpError(
+				"There are no stores in db",
+				404
+			)
+		);
+	}
+
+	console.log(stores);
+	// return res.status(200).json({message: "Hello"})
+	res.status(200).json({
+		stores: stores.map(
+			store => store.toObject({
+				getters: true
+			})
+		)
+	});
 }
 
 const getStoreById = async(req, res, next) => {
@@ -45,7 +62,8 @@ const getStoreById = async(req, res, next) => {
 		);
 	}
 
-	res.json({ store: store.toObject( {getters: true} )});
+	console.log(typeof stores);
+	// res.json({ store: store.toObject( {getters: true} )});
 }
 
 const getDrugsByStoreId = async(req, res, next) => {
@@ -56,6 +74,7 @@ const getDrugsByStoreId = async(req, res, next) => {
 	try {
 		storeDrugs = await Store.findById(storeId).drugs;
 	} catch (error) {
+		console.log("Error in getDrugsByStoreId: ", error);
 		return next(
 			new HttpError(
 				error.message,
@@ -71,7 +90,7 @@ const getDrugsByStoreId = async(req, res, next) => {
 			)
 		);
 	}
-	res.json({ drugs: storeDrugs }).status(200);
+	//res.json({ drugs: storeDrugs.toObject({getters: true}) }).status(200);
 }
 
 const createStore = async(req, res, next) => {
@@ -84,12 +103,12 @@ const createStore = async(req, res, next) => {
 		return next(error);
 	}
 
-	const createdStore = new Store(
-		name, location, address
-	);
+	const createdStore = new Store({
+		name, location, address, drugs: []
+	});
 	
 	try {
-		await createStore.save();
+		await createdStore.save();
 	} catch(error) {
 		return next(
 			new HttpError(
@@ -101,14 +120,7 @@ const createStore = async(req, res, next) => {
 	res.status(200).json({store: createdStore.toObject({getters: true})});
 }
 
-const deleteStore = (req, res, next) => {
-
-}
-
-const updateStore = (req, res, next) => {
-
-}
-
 exports.getDrugsByStoreId = getDrugsByStoreId;
 exports.getStoreById = getStoreById;
 exports.createStore = createStore;
+exports.getAllStores = getAllStores;

@@ -13,7 +13,7 @@ const createOrder = async (req, res, next) => {
 	let order;
 
 	try {
-		await order.save(createdOrder);
+		await Order.save(createdOrder);
 	} catch (error) {
 		return next(new HttpError(
 			error.message,

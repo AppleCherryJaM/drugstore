@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+const HttpError = require("./models/httpError");
 const ordersRouter = require("./routes/orders-router");
 const storesRouter = require("./routes/stores-router");
 // const userRouter = require("./routes/user-router");
